@@ -1,4 +1,4 @@
-namespace GCP.CloudStorage.Api.ExternalServices.Models;
+namespace GCP.CloudStorage.Api.ExternalServices.FileStorage.Models;
 
 public class FileStorageInfo
 {

@@ -1,6 +1,6 @@
-using GCP.CloudStorage.Api.ExternalServices.Models;
+using GCP.CloudStorage.Api.ExternalServices.FileStorage.Models;
 
-namespace GCP.CloudStorage.Api.ExternalServices;
+namespace GCP.CloudStorage.Api.ExternalServices.FileStorage;
 
 public interface IFileStorage
 {

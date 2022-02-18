@@ -1,4 +1,4 @@
-using GCP.CloudStorage.Api.ExternalServices;
+using GCP.CloudStorage.Api.ExternalServices.FileStorage;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GCP.CloudStorage.Api.Controllers;

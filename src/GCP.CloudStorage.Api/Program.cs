@@ -1,4 +1,4 @@
-using GCP.CloudStorage.Api.ExternalServices;
+using GCP.CloudStorage.Api.ExternalServices.FileStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
