@@ -9,11 +9,13 @@ public class FilesController : ControllerBase
 {
     private readonly ILogger<FilesController> _logger;
     private readonly IFileStorage _fileStorage;
+    private readonly string _bucketName;
 
-    public FilesController(ILogger<FilesController> logger, IFileStorage fileStorage)
+    public FilesController(ILogger<FilesController> logger, IFileStorage fileStorage, IConfiguration configuration)
     {
         _logger = logger;
         _fileStorage = fileStorage;
+        _bucketName = configuration.GetValue<string>("FileStorage:BucketName");
     }
 
     [HttpPost]
@@ -23,7 +25,7 @@ public class FilesController : ControllerBase
         var contentType = file.ContentType;
         var fileStream = file.OpenReadStream();
 
-        await _fileStorage.UploadFileAsync("tfsantosbr-images", fileName, contentType, fileStream);
+        await _fileStorage.UploadFileAsync(_bucketName, fileName, contentType, fileStream);
 
         return Ok();
     }
@@ -31,7 +33,7 @@ public class FilesController : ControllerBase
     [HttpGet("{fileName}/info")]
     public async Task<IActionResult> GetFile(string fileName)
     {
-        var fileInfo = await _fileStorage.GetFileInfoAsync("tfsantosbr-images", fileName);
+        var fileInfo = await _fileStorage.GetFileInfoAsync(_bucketName, fileName);
 
         return Ok(fileInfo);
     }
@@ -39,7 +41,7 @@ public class FilesController : ControllerBase
     [HttpGet("{fileName}/download")]
     public async Task<IActionResult> DownloadFile(string fileName)
     {
-        var fileInfo = await _fileStorage.GetFileInfoAsync("tfsantosbr-images", fileName);
+        var fileInfo = await _fileStorage.GetFileInfoAsync(_bucketName, fileName);
 
         if (fileInfo is null)
             return NotFound();
@@ -49,10 +51,18 @@ public class FilesController : ControllerBase
 
         var stream = new MemoryStream();
 
-        await _fileStorage.DownloadObjectAsync("tfsantosbr-images", fileName, stream);
+        await _fileStorage.DownloadObjectAsync(_bucketName, fileName, stream);
 
         stream.Seek(0, SeekOrigin.Begin);
 
         return File(stream, contentType, downloadName);
+    }
+
+    [HttpDelete("{fileName}")]
+    public async Task<IActionResult> RemoveFile(string fileName)
+    {
+        await _fileStorage.RemoveFileAsync(_bucketName, fileName);
+
+        return NoContent();
     }
 }

@@ -27,13 +27,17 @@ public class FileStorage : IFileStorage
         var fileInfo = new FileStorageInfo
         {
             Id = storageObject.Id,
-            MediaLink = storageObject.MediaLink,
             ContentType = storageObject.ContentType,
             Name = storageObject.Name,
             Size = storageObject.Size
         };
 
         return fileInfo;
+    }
+
+    public async Task RemoveFileAsync(string bucketName, string fileName)
+    {
+        await _storage.DeleteObjectAsync(bucketName, fileName);
     }
 
     public async Task UploadFileAsync(string bucket, string fileName, string contentType, Stream fileStream)
